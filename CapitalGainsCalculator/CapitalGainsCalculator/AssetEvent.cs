@@ -9,5 +9,9 @@ namespace CapitalGainsCalculator
         public AssetEventType assetEventType;
         public ulong quantity;
         public decimal pricePerUnitDollars;
+        public decimal pricePerUnitDollarsPlusBrokerage;
+        public decimal brokerageFee;
+        public decimal value;
+        public decimal totalValue;
     }
 }

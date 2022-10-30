@@ -13,10 +13,35 @@ namespace CapitalGainsCalculator
 
         public void PrintAssetEvents()
         {
+            string headerText = string.Format("{0,-3}| {1,-4}| {2,-4}| {3,-9}| {4,-6}| {5,-6}| {6,-9}| {7,-6}| {8,-9}| {9,-6}",
+                                              "ID",
+                                              "CODE",
+                                              "TYPE",
+                                              "DATE",
+                                              "$/UNIT",
+                                              "UNITS",
+                                              "VALUE",
+                                              "FEE",
+                                              "TOTAL",
+                                              "TOTAL $/U");
+
+            Debug.Log(headerText);
+
             for (int i = 0; i < AssetEvents.Count; ++i)
             {
                 AssetEvent assetEvent = AssetEvents[i];
-                string printText = string.Format("{0,-3}| {1,-4}| {2,-4}| {3,-9}| {4,-6}| {5,-6}", i, assetEvent.code, assetEvent.assetEventType.ToString(), assetEvent.date.ToShortDateString(), assetEvent.pricePerUnitDollars.ToString("0.#########"), assetEvent.quantity);
+
+                string printText = string.Format("{0,-3}| {1,-4}| {2,-4}| {3,-9}| {4,-6}| {5,-6}| {6,-9}| {7,-6}| {8,-9}| {9,-6}",
+                                                 i,
+                                                 assetEvent.code,
+                                                 assetEvent.assetEventType.ToString(),
+                                                 assetEvent.date.ToShortDateString(),
+                                                 assetEvent.pricePerUnitDollars.ToString("0.#########"),
+                                                 assetEvent.quantity,
+                                                 assetEvent.value.ToString("0.#########"),
+                                                 assetEvent.brokerageFee.ToString("0.#########"),
+                                                 assetEvent.totalValue.ToString("0.#########"),
+                                                 assetEvent.pricePerUnitDollarsPlusBrokerage.ToString("0.#########"));
 
                 Debug.Log(printText, assetEvent.assetEventType == AssetEventType.Buy ? ConsoleColor.Green : ConsoleColor.Red);
             }
@@ -50,9 +75,9 @@ namespace CapitalGainsCalculator
                 Debug.Log("Date: " + capitalEvent.date);
                 Debug.Log("Quantity: " + capitalEvent.quantity);
                 Debug.Log("Price Per Unit: " + capitalEvent.pricePerUnitDollars);
-                Debug.Log("Cost: " + capitalEvent.totalCost);
-                Debug.Log("Value: " + capitalEvent.totalValue);
-                Debug.Log("Gain: " + capitalEvent.totalGain, capitalEvent.totalGain >= 0 ? ConsoleColor.Green : ConsoleColor.Red);
+                Debug.Log("Cost: " + capitalEvent.totalCost.ToString("0.#########"));
+                Debug.Log("Value: " + capitalEvent.totalValue.ToString("0.#########"));
+                Debug.Log("Gain: " + capitalEvent.totalGain.ToString("0.#########"), capitalEvent.totalGain >= 0 ? ConsoleColor.Green : ConsoleColor.Red);
                 Debug.Log("Units Unaccounted For: " + capitalEvent.unitsUnaccountedFor, capitalEvent.unitsUnaccountedFor == 0 ? ConsoleColor.White : ConsoleColor.Red);
 
                 if (capitalEvent.contributions.Count > 0)
@@ -65,8 +90,8 @@ namespace CapitalGainsCalculator
                         Debug.Log("");
                         Debug.Log("    Date: " + contribution.date);
                         Debug.Log("    Quantity: " + contribution.quantity);
-                        Debug.Log("    Price Per Unit: " + contribution.pricePerUnitDollars);
-                        Debug.Log("    Cost: " + contribution.totalCost);
+                        Debug.Log("    Price Per Unit: " + contribution.pricePerUnitDollars.ToString("0.#########"));
+                        Debug.Log("    Cost: " + contribution.cost.ToString("0.#########"));
                     }
                 }
 
@@ -88,7 +113,7 @@ namespace CapitalGainsCalculator
                 // Add the parcel to the pool on buys
                 if (assetEvent.assetEventType == AssetEventType.Buy)
                 {
-                    AddAssetParcel(assetEvent.code, assetEvent.quantity, assetEvent.pricePerUnitDollars, assetEvent.date);
+                    AddAssetParcel(assetEvent);
                 }
                 // Generate capital gain events on sells
                 else
@@ -98,17 +123,17 @@ namespace CapitalGainsCalculator
             }
         }
 
-        private void AddAssetParcel(string code, ulong quantity, decimal pricePerUnitDollars, DateTime date)
+        private void AddAssetParcel(AssetEvent assetEvent)
         {
-            if (!m_AssetParcelPool.TryGetValue(code, out Queue<AssetParcel> parcelQueue))
+            if (!m_AssetParcelPool.TryGetValue(assetEvent.code, out Queue<AssetParcel> parcelQueue))
             {
                 parcelQueue = new Queue<AssetParcel>();
-                m_AssetParcelPool.Add(code, parcelQueue);
+                m_AssetParcelPool.Add(assetEvent.code, parcelQueue);
             }
 
             AssetParcel parcel = new AssetParcel
             {
-                quantity = quantity, pricePerUnitDollars = pricePerUnitDollars, date = date
+                quantity = assetEvent.quantity, pricePerUnitDollars = assetEvent.pricePerUnitDollars, pricePerUnitDollarsPlusBrokerage = assetEvent.pricePerUnitDollarsPlusBrokerage, date = assetEvent.date
             };
 
             parcelQueue.Enqueue(parcel);
@@ -138,7 +163,7 @@ namespace CapitalGainsCalculator
 
                         CapitalEventContribution contribution = new CapitalEventContribution();
                         contribution.date = parcel.date;
-                        contribution.pricePerUnitDollars = parcel.pricePerUnitDollars;
+                        contribution.pricePerUnitDollars = parcel.pricePerUnitDollarsPlusBrokerage;
 
                         if (parcel.quantity > quantity)
                         {
@@ -153,9 +178,9 @@ namespace CapitalGainsCalculator
                             parcelQueue.Dequeue();
                         }
 
-                        contribution.totalCost = contribution.quantity * contribution.pricePerUnitDollars;
+                        contribution.cost = contribution.quantity * contribution.pricePerUnitDollars;
 
-                        capitalEvent.totalCost += contribution.totalCost;
+                        capitalEvent.totalCost += contribution.cost;
                         capitalEvent.contributions.Add(contribution);
                     }
                     else

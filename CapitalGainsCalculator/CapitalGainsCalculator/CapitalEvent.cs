@@ -7,7 +7,8 @@ namespace CapitalGainsCalculator
     {
         public ulong quantity;
         public decimal pricePerUnitDollars;
-        public decimal totalCost;
+        public decimal cost;
+        public decimal brokerageFee;
         public DateTime date;
     }
 

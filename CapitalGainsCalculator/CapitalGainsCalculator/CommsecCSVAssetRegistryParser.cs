@@ -38,6 +38,12 @@ namespace CapitalGainsCalculator
 
                 assetEvent.pricePerUnitDollars = decimal.Parse(lineSplit[5].Replace("\"", string.Empty));
 
+                assetEvent.value = decimal.Parse(lineSplit[6].Replace("\"", string.Empty));
+                assetEvent.brokerageFee = decimal.Parse(lineSplit[7].Replace("\"", string.Empty));
+                assetEvent.totalValue = assetEvent.value + assetEvent.brokerageFee;
+
+                assetEvent.pricePerUnitDollarsPlusBrokerage = assetEvent.totalValue / assetEvent.quantity;
+
                 newRegistry.AssetEvents.Add(assetEvent);
             }
 
