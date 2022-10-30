@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "18ccee31-bcd9-4e33-9e98-b83395b1a14c": {
+      "ProjectGuid": "18ccee31-bcd9-4e33-9e98-b83395b1a14c",
+      "DisplayName": "CapitalGainsCalculator",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}

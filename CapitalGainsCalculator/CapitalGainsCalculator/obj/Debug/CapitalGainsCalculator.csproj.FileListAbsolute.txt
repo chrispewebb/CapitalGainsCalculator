@@ -1,0 +1,8 @@
+C:\Dev\CapitalGainsCalculator\CapitalGainsCalculator\CapitalGainsCalculator\bin\Debug\CapitalGainsCalculator.exe.config
+C:\Dev\CapitalGainsCalculator\CapitalGainsCalculator\CapitalGainsCalculator\bin\Debug\CapitalGainsCalculator.exe
+C:\Dev\CapitalGainsCalculator\CapitalGainsCalculator\CapitalGainsCalculator\bin\Debug\CapitalGainsCalculator.pdb
+C:\Dev\CapitalGainsCalculator\CapitalGainsCalculator\CapitalGainsCalculator\obj\Debug\CapitalGainsCalculator.csproj.AssemblyReference.cache
+C:\Dev\CapitalGainsCalculator\CapitalGainsCalculator\CapitalGainsCalculator\obj\Debug\CapitalGainsCalculator.csproj.SuggestedBindingRedirects.cache
+C:\Dev\CapitalGainsCalculator\CapitalGainsCalculator\CapitalGainsCalculator\obj\Debug\CapitalGainsCalculator.csproj.CoreCompileInputs.cache
+C:\Dev\CapitalGainsCalculator\CapitalGainsCalculator\CapitalGainsCalculator\obj\Debug\CapitalGainsCalculator.exe
+C:\Dev\CapitalGainsCalculator\CapitalGainsCalculator\CapitalGainsCalculator\obj\Debug\CapitalGainsCalculator.pdb
